@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PasswordRequestState implements ConsoleState {
-
+	
+	public static ConsoleState state;
 	private Console console;
 	private HashSet<String> commands;
 

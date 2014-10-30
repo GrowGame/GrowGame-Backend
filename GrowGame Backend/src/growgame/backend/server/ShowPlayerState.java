@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class ShowPlayerState implements ConsoleState {
 
+	public static ConsoleState state;
 	private Console console;
 	private HashSet<String> commands;
 
@@ -17,7 +18,7 @@ public class ShowPlayerState implements ConsoleState {
 	@Override
 	public void handle() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 
