@@ -16,10 +16,12 @@ public class Console {
 	public void start(){
 		state = new PasswordRequestState(this);
 		setIn(new BufferedReader(new InputStreamReader(System.in)));
+		state.handle();
 	}
 	
 	public void switchState(ConsoleState state){
 		this.state = state;
+		state.handle();
 	}
 
 	public BufferedReader getIn() {
@@ -28,6 +30,11 @@ public class Console {
 
 	public void setIn(BufferedReader in) {
 		this.in = in;
+	}
+
+	public ConsoleState getState() {
+		// TODO Auto-generated method stub
+		return state;
 	}
 	
 	

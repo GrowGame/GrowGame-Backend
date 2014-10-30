@@ -32,83 +32,75 @@ public class ConfigureState implements ConsoleState {
 		BufferedReader in = console.getIn();
 		String input = "";
 		boolean validCommand= false;
-		boolean exit = false;
-		
-		//continue reading until correct command was typed or user typed exit
-		while(!validCommand && !exit){
-			if(exit)
-				System.exit(0);
-			try {
-				input = in.readLine().toLowerCase();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		while(console.getState() instanceof ConfigureState){
+			//continue reading until correct command was typed or user typed exit
+			while(!validCommand){
+				try {
+					input = in.readLine().toLowerCase();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-			for(String cmd : commands){
-				if(input.startsWith(cmd)){
-					validCommand = true;
-					break;
+				for(String cmd : commands){
+					if(input.startsWith(cmd.toLowerCase())){
+						validCommand = true;
+						break;
+					}
+				}
+				if(!validCommand){
+					System.out.println("Command "+input+" could not be recognized! Use 'showCommands' to see the commands list");
 				}
 			}
-			if(!validCommand){
-				System.out.println("Command "+input+" could not be recognized! Use 'showCommands' to see the commands list");
-			}
 
+
+			String[] words = input.split(" ");
+			//Identify and handle command
+			String s = words[0].toLowerCase();
+			switch(s){
+
+			case "showcommands" : 
+				for(String cmd : commands)
+					System.out.println(cmd);
+				break;
+
+
+			case "startgameserver" : 		
+				System.out.println("GameServer started...");
+				break;
+
+
+			case "stopgameServer" : 
+				System.out.println("GameServer stopped...");
+				break;
+
+
+			case "showlog" : 
+				System.out.println("Log...");
+				break;
+
+			case "setmotd" : 
+				System.out.println("MOTD set");
+				break;
+
+			case "showplayers" : 
+				System.out.println("PlayerID | Playername | Online ");
+				break;
+
+			case "player" : 
+				console.switchState(ShowPlayerState.state);
+				break;
+
+			case "exit" : 
+				System.out.println("Exit Console...");
+				console.switchState(PasswordRequestState.state);
+				break;
+
+			}
+			validCommand = false;
 		}
-		
-		String[] words = input.split(" ");
-		//Identify and handle command
-		switch(words[0].toLowerCase()){
-		
-		case("showcommands") : {
-			for(String cmd : commands)
-				System.out.println(cmd);
-		}
-		
-		case("startgameserver") : {
-			
-			
-		} 
-		
-		case("stopGameServer") : {
-			
-		} 
-		
-		case("showLog") : {
-			
-		} 
-		
-		case("setMOTD") : {
-			
-		} 
-		
-		case("showPlayers") : {
-			
-		} 
-		
-		case("player") : {
-			console.switchState(ShowPlayerState.state);
-		} 
-		
-		case("exit") : {
-			
-		} 		
-		
-		
-		commands.add("startGameServer");
-		commands.add("stopGameServer");
-		commands.add("showLog");
-		commands.add("setMOTD");
-		commands.add("showPlayers");
-		commands.add("player");
-		commands.add("exit");
-		
-		
-		
-		}
-		
-		
+
+
 	}
 
 
