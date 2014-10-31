@@ -1,4 +1,4 @@
-package growgame.backend.server;
+package growgame.backend.console;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,7 +21,9 @@ public class Console {
 	
 	public void switchState(ConsoleState state){
 		this.state = state;
-		state.handle();
+		if(state != null){
+			state.handle();
+		}
 	}
 
 	public BufferedReader getIn() {

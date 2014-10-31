@@ -1,4 +1,4 @@
-package growgame.backend.server;
+package growgame.backend.console;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package growgame.backend.server;
+package growgame.backend.console;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class ShowPlayerState implements ConsoleState {
 	public ShowPlayerState(Console c){
 		console = c;
 		commands = new HashSet<String>();
-		commands.add("showCommands");
+		commands.add("show");
 		commands.add("showInventory");
 		commands.add("ban");
 		commands.add("showGrows");
@@ -24,7 +24,7 @@ public class ShowPlayerState implements ConsoleState {
 	
 	@Override
 	public void handle() {
-		// TODO Auto-generated method stub
+		System.out.println("Show Player Mode");
 		BufferedReader in = console.getIn();
 		String input = "";
 		boolean validCommand= false;
@@ -45,7 +45,7 @@ public class ShowPlayerState implements ConsoleState {
 					}
 				}
 				if(!validCommand){
-					System.out.println("Command "+input+" could not be recognized! Use 'showCommands' to see the commands list");
+					System.out.println("Command "+input+" could not be recognized! Use 'show' to see the commands list");
 				}
 
 			}
@@ -53,7 +53,7 @@ public class ShowPlayerState implements ConsoleState {
 			String[] words = input.split(" ");
 			//Identify and handle command
 			switch(words[0].toLowerCase()){
-			case("showcommands") : {
+			case("show") : {
 				for(String cmd : commands)
 					System.out.println(cmd);
 				break;
@@ -80,7 +80,7 @@ public class ShowPlayerState implements ConsoleState {
 			}
 			
 			case("exit") : {
-				console.switchState(PasswordRequestState.state);
+				console.switchState(ConfigureState.state);
 				break;
 			}
 			}		
