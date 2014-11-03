@@ -2,8 +2,10 @@ package growgame.backend.server;
 
 public class CentralUnit {
 
+	private Connector connector;
+	
 	public CentralUnit(){
-		
+		connector = new Connector();
 	}
 	
 	/**
@@ -14,6 +16,7 @@ public class CentralUnit {
 		
 					//load gamestatus
 					//contine game (accept requests and connection attemps)
+					//-> start listening!
 	}
 	
 	public void pauseGameServer(int mins){
