@@ -28,5 +28,14 @@ public class CentralUnit {
 		//disconnect all connected clients (friendly :) )
 	}
 	
+	/**
+	 * Parses a string input transmitted by a user and returns the corresponding request
+	 * @param req the string transmitted by the user
+	 * @return the corresponding request matching the string
+	 */
+	public static Request parseRequest(String req){
+		
+	}
+	
 	
 }
