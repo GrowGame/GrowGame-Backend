@@ -1,5 +1,8 @@
 package growgame.backend.server;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
@@ -33,15 +36,36 @@ public class Connection implements Runnable {
 	 * Waits for requests, as long as the connection is active
 	 */
 	public void run() {
-		// TODO Auto-generated method stub
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} 
+		catch (IOException e) {
+			System.out.println("Exception one start up");
+			e.printStackTrace();
+		}
+		String line = null;
+		try {
+			while((line=in.readLine()) != null){
+			// handle communication , try to parse requests
+			// execute requests and send positive or negative acknowledgement
+				
+			}
+		} 
+		catch (IOException e) {
+			System.out.println("Exception while reading");
+			e.printStackTrace();
+		}
 		
 	}
 	
 	/**
+	 * TODO implementation with keep alive
 	 * returns if the connection represented by the Socket socket is still active or not
 	 * @return true if the socket is active, false if not
 	 */
 	public boolean isActive(){
+
 		return false;
 	}
 	
