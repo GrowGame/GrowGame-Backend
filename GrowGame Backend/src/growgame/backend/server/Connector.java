@@ -26,10 +26,20 @@ public class Connector {
 		connections = new HashSet<Connection>();
 	}
 	
+	public void setRunning(boolean running){
+		this.serverRunning = running;
+	}
+	
+	public boolean getRunning(){
+		return serverRunning;
+	}
+	
 	public void awaitConnections(){
 		while(serverRunning){
 			try {
 				Socket socket = ssocket.accept();
+				Connection c = new Connection(socket);
+				connections.add(c);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -19,13 +19,23 @@ public interface Request {
 	 * @param userID
 	 * @return
 	 */
-	public boolean fulfillsRequirements(long userID);
+	public boolean fulfillsRequirements(long userID, Object[] args);
+	
+/** 	
+   Executes the request, with the given arguments.
+ * @throws RequestArgumentsException if no arguments have been read before, although the request needs one or more.
+ */
+	public void execute() throws RequestArgumentsException;
+	
+	
 	
 	/**
-	 * Executes the request
-	 * @param param a list of request-specific parameters, which are needed to execute the request as desired
+	 * Parses all given arguments from a string representing a request.
+	 * request syntax: bsp "send": 'SEND~param1,param2,param3~Hello, my name is Alexander. I'm testing GrowGame'.
+	 * All Requests should follow these syntax!!! The third part is optional 
+	 * @return an array of arguments which have been parsed from reqString
+	 * @throws RequestArgumentsException, if any argument is missing or has a wrong type or value
 	 */
-	public void execute(Object... param);
-	
+	public Object[] parseArguments(String reqString) throws RequestArgumentsException;
 	
 }

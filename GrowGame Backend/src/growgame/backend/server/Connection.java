@@ -14,6 +14,7 @@ public class Connection implements Runnable {
 
 	
 	private Socket socket;
+	private long userID;
 
 	/**
 	 * Created a connection with a game client
@@ -49,6 +50,11 @@ public class Connection implements Runnable {
 			while((line=in.readLine()) != null){
 			// handle communication , try to parse requests
 			// execute requests and send positive or negative acknowledgement
+				Request req = CentralUnit.parseRequest(line);
+				Object[] args = req.parseArguments(line);
+				if(req.fulfillsRequirements(userID,args)){
+					req.execute();
+				}
 				
 			}
 		} 
