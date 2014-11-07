@@ -3,9 +3,6 @@ package growgame.backend.server;
 public class CentralUnit {
 
 	private Connector connector;
-	private static final InvalidRequest unknownRequest = new InvalidRequest();
-	private static final BuyRequest buyRequest = new BuyRequest();
-	private static final SellRequest sellRequest = new SellRequest();
 	
 	public static void main(String[] args){
 		CentralUnit cu = new CentralUnit();
@@ -60,9 +57,12 @@ public class CentralUnit {
 		case "SEND":{
 			return new SendRequest();
 		}
+		case "KEEPALIVE":{
+			return new KeepAliveRequest();
+		}
 		//Invalid request neg. acknowledgement
 		default:{
-			return CentralUnit.unknownRequest ;
+			return new InvalidRequest(input);
 		}
 		}
 		}

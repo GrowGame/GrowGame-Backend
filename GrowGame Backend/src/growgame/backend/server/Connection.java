@@ -75,7 +75,11 @@ public class Connection implements Runnable {
 				System.out.println(args[0]+"   "+args[1]);
 				if(req.fulfillsRequirements(userID,args)){
 					req.execute();
-					System.out.println("execute :D");
+					//System.out.println("execute :D");
+				}
+				else{
+					getOut().write(req.getErrorMsg());
+					getOut().flush();
 				}
 				
 			}
@@ -95,6 +99,23 @@ public class Connection implements Runnable {
 	public boolean isActive(){
 
 		return false;
+	}
+
+	/**
+	 * TODO calculate inactive time since the last keep alive request
+	 * @return
+	 */
+	public int getInactiveTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public long getUserID() {
+		return userID;
+	}
+	
+	public void setUserID(long id){
+		this.userID = id;
 	}
 	
 	

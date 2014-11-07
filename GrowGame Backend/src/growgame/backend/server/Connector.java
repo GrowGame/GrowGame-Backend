@@ -15,10 +15,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Connector {
 
-	private HashSet<Connection> connections;
 	private ServerSocket ssocket;
 	private boolean serverRunning;
-	private ReentrantLock lock;
 	
 	public Connector(){
 		try {
@@ -27,8 +25,6 @@ public class Connector {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		connections = new HashSet<Connection>();
-		lock = new ReentrantLock();
 	}
 	
 	public void setRunning(boolean running){
@@ -39,14 +35,6 @@ public class Connector {
 		return serverRunning;
 	}
 	
-	public void addConnection(Connection con){
-		System.out.println("Connection added: "+con.getSocket().getLocalAddress());
-		connections.add(con);
-	}
-	
-
-
-	
 	public void awaitConnections(){
 		System.out.println("start listening");
 		while(serverRunning){
@@ -55,7 +43,7 @@ public class Connector {
 				Connection c = new Connection(socket);
 				Thread t = new Thread(c);
 				t.start();
-				this.addConnection(c);
+				ActiveConnections.getInstance().addConnection(c);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

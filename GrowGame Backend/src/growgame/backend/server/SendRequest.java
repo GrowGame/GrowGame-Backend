@@ -3,6 +3,7 @@ package growgame.backend.server;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 public class SendRequest implements Request {
 
@@ -10,10 +11,10 @@ public class SendRequest implements Request {
 	private String errorMsg;
 	private Object[] args;
 	private Connection sender;
-	private Connection[] recipients;
+	private ArrayList<Connection> recipients;
 	private String msg;
 	public SendRequest() {
-	
+	recipients = new ArrayList<Connection>();
 	}
 
 	@Override
@@ -21,6 +22,11 @@ public class SendRequest implements Request {
 		if(args.length==0){
 			errorMsg = "At least one argument (message recipient) is required";
 			return false;
+		}
+		for(int i=0;i<args.length;i++){
+			Connection con = ActiveConnections.getInstance().getConnection(Long.parseLong((String) args[i]));
+			if(con!=null)
+				recipients.add(con);
 		}
 		//TODO Check if recipients exist and write recipients in global variable
 		msg = (String) args[args.length-1];
@@ -31,6 +37,10 @@ public class SendRequest implements Request {
 	public void execute() throws RequestArgumentsException {
 		// TODO Auto-generated method stub
 		System.out.println("Trying to send...");
+		if(recipients.isEmpty()){
+			//TODO handle no recipients
+		}
+		
 		for(Connection con : recipients){
 				try {
 					con.getOut().write(con.getSocket().getInetAddress()+": \""+msg+"\"");
