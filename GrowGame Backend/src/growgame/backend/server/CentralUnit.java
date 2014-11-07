@@ -6,7 +6,11 @@ public class CentralUnit {
 	private static final InvalidRequest unknownRequest = new InvalidRequest();
 	private static final BuyRequest buyRequest = new BuyRequest();
 	private static final SellRequest sellRequest = new SellRequest();
-	private static final SendRequest sendRequest = new SendRequest();
+	
+	public static void main(String[] args){
+		CentralUnit cu = new CentralUnit();
+		cu.startGameServer();
+	}
 	
 	public CentralUnit(){
 		connector = new Connector();
@@ -21,6 +25,8 @@ public class CentralUnit {
 					//load gamestatus
 					//contine game (accept requests and connection attemps)
 					//-> start listening!
+		connector.setRunning(true);
+		connector.awaitConnections();
 	}
 	
 	public void pauseGameServer(int mins){
@@ -34,28 +40,25 @@ public class CentralUnit {
 	
 	/**
 	 * Parses a string input transmitted by a user and returns the corresponding request
-	 * request syntax: bsp "send": 'SEND~param1,param2,param3~Hello, my name is Alexander. I'm testing GrowGame' 
+	 * request syntax: bsp "send": 'SEND~param1,param2,param3,Hello, my name is Alexander. I'm testing GrowGame' 
 	 * @param req the string transmitted by the user
 	 * @return the corresponding request matching the string
 	 */
-	public static Request parseRequest(String input){
-		String[] requests = input.split("~");
-		if(requests.length!=3){
-			//TODO negative acknowledgement: One and only one request is allowed
+	public static Request createRequest(String input){
+		String request = input.substring(0,input.indexOf("~"));
 
-		}
-		String req = requests[0].toUpperCase();
-
-		switch(req) {
+		request = request.toUpperCase();
+        System.out.println(request);
+		switch(request) {
 		case "BUY":{
 
-			return CentralUnit.buyRequest;
+			return new BuyRequest();
 		}
 		case "SELL":{
-			return CentralUnit.sellRequest;
+			return new SellRequest();
 		}
 		case "SEND":{
-			return CentralUnit.sendRequest;
+			return new SendRequest();
 		}
 		//Invalid request neg. acknowledgement
 		default:{

@@ -1,8 +1,10 @@
 package growgame.backend.server;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 /**
@@ -31,6 +33,21 @@ public class Connection implements Runnable {
 	public Socket getSocket(){
 		return socket;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public BufferedWriter getOut(){
+		BufferedWriter out = null;
+		try {
+			 out = new BufferedWriter(new OutputStreamWriter(getSocket().getOutputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return out;
+	}
 
 	@Override
 	/**
@@ -47,13 +64,18 @@ public class Connection implements Runnable {
 		}
 		String line = null;
 		try {
+			System.out.println("try reading");
 			while((line=in.readLine()) != null){
+				System.out.println("reading!!");
 			// handle communication , try to parse requests
 			// execute requests and send positive or negative acknowledgement
-				Request req = CentralUnit.parseRequest(line);
+				Request req = CentralUnit.createRequest(line);
+				System.out.println(req.getClass());
 				Object[] args = req.parseArguments(line);
+				System.out.println(args[0]+"   "+args[1]);
 				if(req.fulfillsRequirements(userID,args)){
 					req.execute();
+					System.out.println("execute :D");
 				}
 				
 			}

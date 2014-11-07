@@ -23,4 +23,10 @@ public class InvalidRequest implements Request {
 		return null;
 	}
 
+	@Override
+	public String getErrorMsg() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

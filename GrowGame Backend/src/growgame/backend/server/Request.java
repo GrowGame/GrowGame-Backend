@@ -16,6 +16,7 @@ public interface Request {
 
 	/**
 	 * Tests if the user or his inventory/profile is capable of executing this request
+	 * If this is not the case, this method prepares an error-message used by getErrorMsg()
 	 * @param userID
 	 * @return
 	 */
@@ -31,11 +32,18 @@ public interface Request {
 	
 	/**
 	 * Parses all given arguments from a string representing a request.
-	 * request syntax: bsp "send": 'SEND~param1,param2,param3~Hello, my name is Alexander. I'm testing GrowGame'.
+	 * request syntax: bsp "send": 'SEND~param1,param2,param3,Hello, my name is Alexander. I'm testing GrowGame'.
 	 * All Requests should follow these syntax!!! The third part is optional 
 	 * @return an array of arguments which have been parsed from reqString
 	 * @throws RequestArgumentsException, if any argument is missing or has a wrong type or value
 	 */
 	public Object[] parseArguments(String reqString) throws RequestArgumentsException;
+	
+	/**
+	 * Provides an error message to be sent to the user who requested
+	 * @return the error message produced by fulfillsRequirements(long userID, Object[] args), or null if 
+	 * fulfillsRequirements returned true or if fulfillsRequirements hasn't been executed before
+	 */
+	public String getErrorMsg();
 	
 }
