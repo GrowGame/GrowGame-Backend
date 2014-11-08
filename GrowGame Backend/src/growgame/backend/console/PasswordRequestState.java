@@ -27,16 +27,17 @@ public class PasswordRequestState implements ConsoleState {
 		//continue reading until correct command was typed or user typed exit
 		while(!validPW){
 			input = "";
-				 if ((passwd = System.console().readPassword("[%s]", "Password:")) != null) {
-					 input = new String(passwd);
-				     java.util.Arrays.fill(passwd, ' ');
-				 }
-//			try {
-//				input = in.readLine();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			//works only with command line interpreter not with eclipse console
+//				 if ((passwd = System.console().readPassword("[%s]", "Password:")) != null) {
+//					 input = new String(passwd);
+//				     java.util.Arrays.fill(passwd, ' ');
+//				 }
+			try {
+				input = in.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(input.equals("wiesenfeld666"))
 				validPW = true;
 		}

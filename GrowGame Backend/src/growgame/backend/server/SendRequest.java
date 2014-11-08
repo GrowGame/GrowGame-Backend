@@ -1,8 +1,6 @@
 package growgame.backend.server;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 public class SendRequest implements Request {
@@ -82,6 +80,12 @@ public class SendRequest implements Request {
 	public String getErrorMsg() {
 		// TODO Auto-generated method stub
 		return errorMsg;
+	}
+
+	@Override
+	public String getPositiveAck() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

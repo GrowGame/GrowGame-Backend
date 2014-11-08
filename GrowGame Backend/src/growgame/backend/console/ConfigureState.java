@@ -1,5 +1,7 @@
 package growgame.backend.console;
 
+import growgame.backend.server.CentralUnit;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +14,7 @@ public class ConfigureState implements ConsoleState {
 	public static ConsoleState state;	
 	private Console console;
 	private HashSet<String> commands;
+	private CentralUnit cu = null;
 
 	public ConfigureState(Console c){
 		console = c;
@@ -22,6 +25,7 @@ public class ConfigureState implements ConsoleState {
 		commands.add("showLog");
 		commands.add("setMOTD");
 		commands.add("showPlayers");
+		commands.add("showconnections");
 		commands.add("player");
 		commands.add("exit");
 	}
@@ -67,13 +71,18 @@ public class ConfigureState implements ConsoleState {
 				break;
 
 
-			case "startgameserver" : 		
-				System.out.println("GameServer started...");
+			case "startgameserver" : 
+				cu = new CentralUnit();
+				cu.startGameServer();
 				break;
 
 
-			case "stopgameServer" : 
-				System.out.println("GameServer stopped...");
+			case "stopgameserver" : 
+				if(cu==null || !cu.getRunning()){
+					System.out.println("Illegal command! Server is not running!");
+				}
+				else{
+				cu.pauseGameServer(0);}
 				break;
 
 
@@ -87,6 +96,10 @@ public class ConfigureState implements ConsoleState {
 
 			case "showplayers" : 
 				System.out.println("PlayerID | Playername | Online ");
+				break;
+			
+			case "showconnections" :
+				System.out.println("   IP   |UserID| Online ");
 				break;
 
 			case "player" : 

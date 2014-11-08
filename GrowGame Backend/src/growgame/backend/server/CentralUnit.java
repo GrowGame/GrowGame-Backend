@@ -3,14 +3,20 @@ package growgame.backend.server;
 public class CentralUnit {
 
 	private Connector connector;
-	
-	public static void main(String[] args){
-		CentralUnit cu = new CentralUnit();
-		cu.startGameServer();
-	}
+	private boolean isRunning;
+
 	
 	public CentralUnit(){
 		connector = new Connector();
+	}
+	
+	public boolean getRunning(){
+		return isRunning;
+	}
+	
+	public void setRunning(boolean running){
+		isRunning = running;
+		connector.setRunning(running);
 	}
 	
 	/**
@@ -21,9 +27,11 @@ public class CentralUnit {
 		
 					//load gamestatus
 					//contine game (accept requests and connection attemps)
-					//-> start listening!
-		connector.setRunning(true);
-		connector.awaitConnections();
+					//-> start listening
+		System.out.println("starting game server");
+		setRunning(true);
+		Thread t = new Thread(connector);
+		t.start();
 	}
 	
 	public void pauseGameServer(int mins){
@@ -33,6 +41,7 @@ public class CentralUnit {
 		//block all incoming transactions etc...
 		//save game status
 		//disconnect all connected clients (friendly :) )
+		setRunning(false);
 	}
 	
 	/**
@@ -60,12 +69,17 @@ public class CentralUnit {
 		case "KEEPALIVE":{
 			return new KeepAliveRequest();
 		}
+		case "AUTH":{
+			return new AuthenticationRequest();
+		}
 		//Invalid request neg. acknowledgement
 		default:{
 			return new InvalidRequest(input);
 		}
 		}
 		}
+
+
 	
 	
 	

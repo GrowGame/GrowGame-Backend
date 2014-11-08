@@ -46,4 +46,11 @@ public interface Request {
 	 */
 	public String getErrorMsg();
 	
+	/**
+	 * Returns the positive acknowledgement for a request, which is sent to the client to signalize
+	 * that everything is okay and the request has been executed with success
+	 * @return the positive acknowledgement for a failure free execution of the request
+	 */
+	public String getPositiveAck();
+	
 }

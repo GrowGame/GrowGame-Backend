@@ -27,6 +27,12 @@ public class SellRequest implements Request {
 		return null;
 	}
 
+	@Override
+	public String getPositiveAck() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 }

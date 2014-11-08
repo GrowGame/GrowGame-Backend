@@ -37,4 +37,10 @@ public class InvalidRequest implements Request {
 		return "The desired request could not be recognized!";
 	}
 
+	@Override
+	public String getPositiveAck() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashSet;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Alex
  *
  */
-public class Connector {
+public class Connector implements Runnable {
 
 	private ServerSocket ssocket;
 	private boolean serverRunning;
@@ -29,6 +30,13 @@ public class Connector {
 	
 	public void setRunning(boolean running){
 		this.serverRunning = running;
+		if(!running){
+			try {
+				ssocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public boolean getRunning(){
@@ -44,13 +52,24 @@ public class Connector {
 				Thread t = new Thread(c);
 				t.start();
 				ActiveConnections.getInstance().addConnection(c);
+			} catch (SocketException e) {
+				//This exception is always be thrown if awaitConnections() has been executed after settubg
+				//running to false
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
+			
 		}
 		System.out.println("stop listening");
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		awaitConnections();
 	}
 	
 	

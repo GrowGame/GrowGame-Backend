@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Represents an active connection with a game client to the server
@@ -17,13 +20,19 @@ public class Connection implements Runnable {
 	
 	private Socket socket;
 	private long userID;
+	private GregorianCalendar lastKeepAlive;
 
 	/**
 	 * Created a connection with a game client
 	 * @param socket which is used to communicate
 	 */
 	public Connection(Socket socket){
+		if(socket==null){
+			throw new NullPointerException("Given socket was null!");
+		}
 		this.socket = socket;
+		this.userID = -1;
+		lastKeepAlive = new GregorianCalendar();
 	}
 	
 	/**
@@ -59,21 +68,23 @@ public class Connection implements Runnable {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} 
 		catch (IOException e) {
-			System.out.println("Exception one start up");
 			e.printStackTrace();
 		}
 		String line = null;
 		try {
-			System.out.println("try reading");
 			while((line=in.readLine()) != null){
 				System.out.println("reading!!");
 			// handle communication , try to parse requests
 			// execute requests and send positive or negative acknowledgement
 				Request req = CentralUnit.createRequest(line);
-				System.out.println(req.getClass());
 				Object[] args = req.parseArguments(line);
-				System.out.println(args[0]+"   "+args[1]);
 				if(req.fulfillsRequirements(userID,args)){
+					//AutenticationRequest is the only request which needs this following treatmeant
+					//instead of execute()
+					if(req instanceof AuthenticationRequest){
+						userID = Long.parseLong((String)args[0]);
+					}
+						
 					req.execute();
 					//System.out.println("execute :D");
 				}
@@ -102,14 +113,19 @@ public class Connection implements Runnable {
 	}
 
 	/**
-	 * TODO calculate inactive time since the last keep alive request
-	 * @return
+	 * Calculate inactive time since the last keep alive request
+	 * ...Could be calculated faster with differences of System.currentTimeinMillis()...
+	 * @return the time difference since the lastKeepAlive request has been sent by the client
 	 */
-	public int getInactiveTime() {
-		// TODO Auto-generated method stub
-		return 0;
+	public GregorianCalendar getInactiveTime() {
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTime(new Date(gc.getTimeInMillis()-lastKeepAlive.getTimeInMillis()));
+		return gc;
 	}
 
+	/**
+	 * @return the userID of this connection or -1 if the user has not identified himself yet
+	 */
 	public long getUserID() {
 		return userID;
 	}

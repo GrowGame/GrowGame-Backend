@@ -10,7 +10,7 @@ public class ActiveConnections {
 	private ArrayList<Connection> list;
 	private static ActiveConnections instance = null;
 	private ReentrantLock lock;
-	private static int Timeout = 7;
+	private static long Timeout = 7000;
 	private boolean serverRunning;
 	
 	private ActiveConnections(){
@@ -26,7 +26,7 @@ public class ActiveConnections {
 				// TODO Auto-generated method stub 
 				while(serverRunning){					
 					for(Connection c : getConnections()){
-						if(c.getInactiveTime()>Timeout){
+						if(c.getInactiveTime().getTimeInMillis()>Timeout){
 							removeConnection(c);
 						}
 					}
