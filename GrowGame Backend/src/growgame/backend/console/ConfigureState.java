@@ -55,7 +55,7 @@ public class ConfigureState implements ConsoleState {
 					}
 				}
 				if(!validCommand){
-					System.out.println("Command "+input+" could not be recognized! Use 'show' to see the commands list");
+					System.out.println("Command \""+input+"\" could not be recognized! Use 'show' to see the commands list");
 				}
 			}
 
@@ -79,7 +79,7 @@ public class ConfigureState implements ConsoleState {
 
 			case "stopgameserver" : 
 				if(cu==null || !cu.getRunning()){
-					System.out.println("Illegal command! Server is not running!");
+					System.out.println("Illegal command: \""+s+"\"! Server is not running!");
 				}
 				else{
 				cu.pauseGameServer(0);}
@@ -99,7 +99,11 @@ public class ConfigureState implements ConsoleState {
 				break;
 			
 			case "showconnections" :
-				System.out.println("   IP   |UserID| Online ");
+				if(cu==null || !cu.getRunning()){
+					System.out.println("Illegal command: \""+s+"\"! Server is not running!");
+				}
+				else{
+				System.out.println("   IP   |UserID| Online ");}
 				break;
 
 			case "player" : 
