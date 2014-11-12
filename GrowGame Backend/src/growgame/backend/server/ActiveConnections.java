@@ -25,10 +25,11 @@ public class ActiveConnections {
 			public void run() {
 				// TODO Auto-generated method stub 
 				while(serverRunning){
-					for(Connection c : getConnections()){
+					List<Connection> list = getConnections();
+					for(Connection c : list){
 						if(c.getInactiveTime().getTimeInMillis()>Timeout){
 							removeConnection(c);
-							break;
+						//	break;
 						}
 					}
 					try {

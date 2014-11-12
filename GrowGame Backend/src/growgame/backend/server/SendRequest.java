@@ -21,8 +21,9 @@ public class SendRequest implements Request {
 			errorMsg = "At least one argument (message recipient) is required";
 			return false;
 		}
-		for(int i=0;i<args.length;i++){
-			Connection con = ActiveConnections.getInstance().getConnection(Long.parseLong((String) args[i]));
+		for(int i=0;i<args.length-1;i++){
+			System.out.println(args[i]);
+			Connection con = ActiveConnections.getInstance().getConnection( (long)args[i]);
 			if(con!=null)
 				recipients.add(con);
 		}
