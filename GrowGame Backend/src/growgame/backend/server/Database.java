@@ -12,7 +12,7 @@ import com.mysql.jdbc.Statement;
 public class Database {
 
 	private static Database instance;
-	private static final String serverURL = "localhost";
+	private static final String host = "localhost";
 	private static java.sql.Connection con;
 	private static ReentrantLock lock = new ReentrantLock();
 	
@@ -28,14 +28,14 @@ public class Database {
 		if(instance == null){
 			instance = new Database();
 			try {
-				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Class.forName("com.mysql.jdbc.Driver");
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	
 			try {
 
-				con = DriverManager.getConnection(serverURL,"user","password");
+				con = DriverManager.getConnection("jdbc:mysql://"+host+"/database","user","password");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -48,10 +48,10 @@ public class Database {
 	/**
 	 * Reconnects to the MySQL-Server
 	 */
-	public static void reconnect(){
+	public void reconnect(){
 		lock.lock();
 		try {
-			con = DriverManager.getConnection(serverURL);
+			con = DriverManager.getConnection("jdbc:mysql://"+host+"/database","user","password");
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -65,7 +65,7 @@ public class Database {
 	 * @param a read query string
 	 * @return the result set given by the server as respond to the query
 	 */
-	public static ResultSet sendReadQuery(String query){
+	public ResultSet sendReadQuery(String query){
 		java.sql.Statement st;
 		ResultSet rs = null;
 		lock.lock();
@@ -86,7 +86,7 @@ public class Database {
 	 *  connected mysql server
 	 * @param a update query string
 	 */
-	public static void sendUpdateQuery(String query){
+	public void sendUpdateQuery(String query){
 		java.sql.Statement st;
 		lock.lock();
 		try {

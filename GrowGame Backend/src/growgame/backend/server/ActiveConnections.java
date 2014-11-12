@@ -24,14 +24,17 @@ public class ActiveConnections {
 			 */
 			public void run() {
 				// TODO Auto-generated method stub 
-				while(serverRunning){					
+				while(serverRunning){
 					for(Connection c : getConnections()){
 						if(c.getInactiveTime().getTimeInMillis()>Timeout){
 							removeConnection(c);
+							break;
 						}
 					}
 					try {
-						Thread.sleep(1000);
+						System.out.println("before sleep");
+						Thread.sleep(3000);
+						System.out.println("after sleep");
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
