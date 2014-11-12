@@ -61,7 +61,16 @@ public class Tester {
 		try {
 			out.write("SEND~123,lol ich faile\n");
 			out.flush();
-
+			//sleep 5 sec
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//send keepalive
+			out.write("Auth~123,unreal\n");
+			out.flush();
 			System.out.println("Client: "+in.readLine());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -35,7 +35,7 @@ public class Database {
 			}	
 			try {
 
-				con = DriverManager.getConnection("jdbc:mysql://"+host+"/database","user","password");
+				con = DriverManager.getConnection("jdbc:mysql://"+host+"/growdb","root","666666");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -71,7 +71,7 @@ public class Database {
 		lock.lock();
 		try {
 			st = con.createStatement();
-			rs = st.executeQuery("");
+			rs = st.executeQuery(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,7 +83,7 @@ public class Database {
 	
 	/**
 	 * Expects a mysql update string(INSERT, UPDATE, DELETE ), which is used to get data from the currently
-	 *  connected mysql server
+	 * connected mysql server
 	 * @param a update query string
 	 */
 	public void sendUpdateQuery(String query){

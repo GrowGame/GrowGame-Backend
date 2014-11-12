@@ -27,14 +27,16 @@ public class ActiveConnections {
 				while(serverRunning){
 					List<Connection> list = getConnections();
 					for(Connection c : list){
+						System.out.println(c);
 						if(c.getInactiveTime().getTimeInMillis()>Timeout){
 							removeConnection(c);
 						//	break;
 						}
 					}
+					//wait some time, no need to check keepalive all the time
 					try {
 						System.out.println("before sleep");
-						Thread.sleep(3000);
+						Thread.sleep(2000);
 						System.out.println("after sleep");
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
@@ -78,22 +80,26 @@ public class ActiveConnections {
 	 * @return
 	 */
 	public Connection getConnection(long userID){
+		Connection result = null;
+		lock.lock();
 		for(Connection c : getConnections()){
 			if(c.getUserID()==userID){
-				return c;
+				result =  c;
 			}
 		}
-		return null;
+		lock.unlock();
+		return result;
 	}
 	
 	/**
 	 * Gives a view only perspective of all active Connections
+	 * Uses UmmutableList because iterating over Collections.unmodifiableList did not worked as expected...
 	 * @return unmodifiable list of all active connections
 	 */
 	public List<Connection> getConnections(){
 		//is mutual exclusion needed here?
 		lock.lock();
-		List<Connection> result = Collections.unmodifiableList(list);
+		List<Connection> result = com.google.common.collect.ImmutableList.copyOf(list);
 		lock.unlock();
 		return result;
 	}

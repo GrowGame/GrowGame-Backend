@@ -1,5 +1,8 @@
 package growgame.backend.server;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class AuthenticationRequest implements Request {
 
 	private String msg = null;
@@ -12,6 +15,18 @@ public class AuthenticationRequest implements Request {
 		//					yes -> check if user is already online
 		//
 		//
+		System.out.println("Select id FROM growdb.useraccs WHERE useraccs.id="+args[0]+
+				" AND pw=\""+args[1]+"\"");
+		ResultSet rs = Database.getInstance().sendReadQuery("Select id FROM growdb.useraccs WHERE useraccs.id=\""+args[0]+
+				"\" AND pw=\""+args[1]+"\"");
+		try {
+			if(rs.next())
+				return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("false....");
 		return false;
 	}
 

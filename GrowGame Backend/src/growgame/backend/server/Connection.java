@@ -79,10 +79,14 @@ public class Connection implements Runnable {
 				Request req = CentralUnit.createRequest(line);
 				Object[] args = req.parseArguments(line);
 				if(req.fulfillsRequirements(userID,args)){
-					//AutenticationRequest is the only request which needs this following treatmeant
+					//AutenticationRequest and KeepAlive is the only request which needs this following treatment
 					//instead of execute()
 					if(req instanceof AuthenticationRequest){
 						userID = Long.parseLong((String)args[0]);
+						keepAlive();
+					}
+					else if(req instanceof KeepAliveRequest){
+						keepAlive();
 					}
 						
 					req.execute();
@@ -122,6 +126,13 @@ public class Connection implements Runnable {
 		gc.setTime(new Date(gc.getTimeInMillis()-lastKeepAlive.getTimeInMillis()));
 		return gc;
 	}
+	
+	/**
+	 * refreshes the lastKeepAlive of of this connection
+	 */
+	public void keepAlive(){
+		lastKeepAlive = new GregorianCalendar();
+	}
 
 	/**
 	 * @return the userID of this connection or -1 if the user has not identified himself yet
@@ -134,6 +145,9 @@ public class Connection implements Runnable {
 		this.userID = id;
 	}
 	
+	public String toString(){
+		return "userID: "+userID+"\nIP: "+socket.getInetAddress()+"\nlastKeepAlive(sec): "+(getInactiveTime().getTimeInMillis()/1000.0);
+	}
 	
 	
 	
