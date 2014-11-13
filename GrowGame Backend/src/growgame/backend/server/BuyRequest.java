@@ -2,9 +2,14 @@ package growgame.backend.server;
 
 public class BuyRequest implements Request {
 
+	private String errorMsg;
+
 	@Override
 	public boolean fulfillsRequirements(long userID, Object[] args) {
-		// TODO Auto-generated method stub
+		if(userID==-1){
+			errorMsg = "SEND~false,user not authenticated";
+			return false;
+		}
 		return false;
 	}
 

@@ -19,6 +19,9 @@ public class Connection implements Runnable {
 
 	
 	private Socket socket;
+	/**
+	 * userID = -1 means that no Authentication occured before, all requests are denied
+	 */
 	private long userID;
 	private GregorianCalendar lastKeepAlive;
 
@@ -78,9 +81,11 @@ public class Connection implements Runnable {
 			// execute requests and send positive or negative acknowledgement
 				Request req = CentralUnit.createRequest(line);
 				Object[] args = req.parseArguments(line);
+				System.out.println("REQ: "+req.getClass().getName());
 				if(req.fulfillsRequirements(userID,args)){
 					//AutenticationRequest and KeepAlive is the only request which needs this following treatment
 					//instead of execute()
+					
 					if(req instanceof AuthenticationRequest){
 						userID = Long.parseLong((String)args[0]);
 						keepAlive();
@@ -88,7 +93,7 @@ public class Connection implements Runnable {
 					else if(req instanceof KeepAliveRequest){
 						keepAlive();
 					}
-						
+					
 					req.execute();
 					//System.out.println("execute :D");
 				}

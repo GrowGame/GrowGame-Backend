@@ -30,14 +30,13 @@ public class ActiveConnections {
 						System.out.println(c);
 						if(c.getInactiveTime().getTimeInMillis()>Timeout){
 							removeConnection(c);
+							System.out.println("Removed Connection: "+c.getUserID()+" due to Timeout");
 						//	break;
 						}
 					}
 					//wait some time, no need to check keepalive all the time
 					try {
-						System.out.println("before sleep");
 						Thread.sleep(2000);
-						System.out.println("after sleep");
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

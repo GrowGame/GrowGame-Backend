@@ -21,6 +21,10 @@ public class SendRequest implements Request {
 			errorMsg = "At least one argument (message recipient) is required";
 			return false;
 		}
+		if(userID==-1){
+			errorMsg = "SEND~false,user not authenticated";
+			return false;
+		}
 		for(int i=0;i<args.length-1;i++){
 			System.out.println(args[i]);
 			Connection con = ActiveConnections.getInstance().getConnection( (long)args[i]);

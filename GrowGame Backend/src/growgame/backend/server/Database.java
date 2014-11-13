@@ -25,6 +25,7 @@ public class Database {
 	 * @return an instance of Database
 	 */
 	public static Database getInstance(){
+		lock.lock();
 		if(instance == null){
 			instance = new Database();
 			try {
@@ -42,6 +43,7 @@ public class Database {
 
 			}
 		}
+		lock.unlock();
 		return instance;
 	}
 	
@@ -51,7 +53,7 @@ public class Database {
 	public void reconnect(){
 		lock.lock();
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://"+host+"/database","user","password");
+			con = DriverManager.getConnection("jdbc:mysql://"+host+"/growdb","root","66666");
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
