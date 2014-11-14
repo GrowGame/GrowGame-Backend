@@ -6,6 +6,7 @@ import java.sql.SQLException;
 public class AuthenticationRequest implements Request {
 
 	private String msg = null;
+	private String username;
 	@Override
 	public boolean fulfillsRequirements(long userID, Object[] args) {
 		// TODO check if userID exists
@@ -15,13 +16,19 @@ public class AuthenticationRequest implements Request {
 		//					yes -> check if user is already online
 		//
 		//
-		System.out.println("Select id FROM growdb.useraccs WHERE useraccs.id="+args[0]+
+		System.out.println("Select username FROM growdb.useraccs WHERE useraccs.id="+args[0]+
 				" AND pw=\""+args[1]+"\"");
-		ResultSet rs = Database.getInstance().sendReadQuery("Select id FROM growdb.useraccs WHERE useraccs.id=\""+args[0]+
+		ResultSet rs = Database.getInstance().sendReadQuery("Select username FROM growdb.useraccs WHERE useraccs.id=\""+args[0]+
 				"\" AND pw=\""+args[1]+"\"");
 		try {
-			if(rs.next())
+			if(rs==null){
+				msg = "MySql server did not respond.";
+				return false;
+				}
+			if(rs.next()){
+				username = rs.getString("username");
 				return true;
+				}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,6 +66,10 @@ public class AuthenticationRequest implements Request {
 	public String getPositiveAck() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getUsername(int userID) {
+		return username;
 	}
 
 }

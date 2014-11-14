@@ -1,6 +1,8 @@
 package growgame.backend.console;
 
+import growgame.backend.server.ActiveConnections;
 import growgame.backend.server.CentralUnit;
+import growgame.backend.server.Connection;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -72,9 +74,14 @@ public class ConfigureState implements ConsoleState {
 
 
 			case "startgameserver" : 
+				if(cu!=null&&cu.getRunning()){
+					System.out.println("Illegal command: \""+s+"\"! Server is already running!");
+				}
+				else{
 				cu = new CentralUnit();
 				cu.startGameServer();
 				break;
+				}
 
 
 			case "stopgameserver" : 
@@ -103,7 +110,12 @@ public class ConfigureState implements ConsoleState {
 					System.out.println("Illegal command: \""+s+"\"! Server is not running!");
 				}
 				else{
-				System.out.println("   IP   |UserID| Online ");}
+				String r = "    IP	 "+" UserID"+  "   Username"+"   LastKeepAlive \n";
+				for(Connection c : ActiveConnections.getInstance().getConnections()){
+					r+= c+"\n";
+				}
+				System.out.println(r);
+				}
 				break;
 
 			case "player" : 

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -22,8 +23,10 @@ public class Connection implements Runnable {
 	/**
 	 * userID = -1 means that no Authentication occured before, all requests are denied
 	 */
-	private long userID;
+	private int userID;
 	private GregorianCalendar lastKeepAlive;
+	private String username;
+	private boolean aborted;
 
 	/**
 	 * Created a connection with a game client
@@ -44,6 +47,21 @@ public class Connection implements Runnable {
 	 */
 	public Socket getSocket(){
 		return socket;
+	}
+	
+	/**
+	 * @return the username if the user has already commited an authentication request and null if not
+	 */
+	public String getUsername(){
+		return username;
+	}
+	
+	/**
+	 * Tries to eliminate the connection. The current read process will be finished, 
+	 * but no request executed
+	 */
+	public void stop(){
+		aborted = true;
 	}
 	
 	/**
@@ -75,8 +93,11 @@ public class Connection implements Runnable {
 		}
 		String line = null;
 		try {
-			while((line=in.readLine()) != null){
-				System.out.println("reading!!");
+			while((!socket.isClosed())&&(line=in.readLine()) != null){
+				if(aborted){//connection shall be interrupted
+					socket.close();
+					return;
+				}
 			// handle communication , try to parse requests
 			// execute requests and send positive or negative acknowledgement
 				Request req = CentralUnit.createRequest(line);
@@ -87,7 +108,8 @@ public class Connection implements Runnable {
 					//instead of execute()
 					
 					if(req instanceof AuthenticationRequest){
-						userID = Long.parseLong((String)args[0]);
+						userID = Integer.parseInt((String)args[0]);
+						username = ((AuthenticationRequest)req).getUsername(userID);
 						keepAlive();
 					}
 					else if(req instanceof KeepAliveRequest){
@@ -105,6 +127,7 @@ public class Connection implements Runnable {
 			}
 		} 
 		catch (IOException e) {
+			
 			System.out.println("Exception while reading");
 			e.printStackTrace();
 		}
@@ -146,12 +169,12 @@ public class Connection implements Runnable {
 		return userID;
 	}
 	
-	public void setUserID(long id){
+	public void setUserID(int id){
 		this.userID = id;
 	}
 	
 	public String toString(){
-		return "userID: "+userID+"\nIP: "+socket.getInetAddress()+"\nlastKeepAlive(sec): "+(getInactiveTime().getTimeInMillis()/1000.0);
+		return getSocket().getInetAddress()+"   "+getUserID()+"   "+getUsername()+"   lastKeepAlive(sec): "+(getInactiveTime().getTimeInMillis()/1000.0);
 	}
 	
 	

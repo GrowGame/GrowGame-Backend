@@ -1,5 +1,12 @@
 package growgame.backend.server;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+
 public class CentralUnit {
 
 	private Connector connector;
@@ -32,6 +39,78 @@ public class CentralUnit {
 		setRunning(true);
 		Thread t = new Thread(connector);
 		t.start();
+		
+		
+		Socket socket = null;
+		Socket socket2 = null;
+		BufferedWriter out2 = null;
+		BufferedReader in2 = null;
+		BufferedWriter out = null;
+		BufferedReader in = null;
+		
+		try {
+			socket = new Socket("localhost",1337);
+			socket2 = new Socket("localhost",1337);
+		//	socket.bind(new SocketAddress());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			
+			in2 = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
+			out2 = new BufferedWriter(new OutputStreamWriter(socket2.getOutputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		final BufferedWriter out3=out2;
+			//sleep 5 sec
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				out2.write("AUTH~124,huso\n");
+				out2.flush();
+				//send keepalive
+				out.write("Auth~123,unreal\n");
+				out.flush();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			Runnable r = new Runnable(){
+
+				@Override
+				public void run() {
+					while(true){
+						
+						try {
+							out3.write("KeepAlive~\n");
+							out3.flush();
+							try {
+								Thread.sleep(5000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						} catch (IOException e) {
+							// should be solved better
+							System.out.println("Seems that the server cut the connection...stop sending packets");
+							return;
+						}
+						
+					}
+				}
+				};
+				Thread tt = new Thread(r);
+				tt.start();
+			
 	}
 	
 	public void pauseGameServer(int mins){
@@ -78,6 +157,7 @@ public class CentralUnit {
 		}
 		}
 		}
+	
 
 
 	

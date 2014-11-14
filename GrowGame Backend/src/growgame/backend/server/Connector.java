@@ -22,6 +22,8 @@ public class Connector implements Runnable {
 	public Connector(){
 		try {
 			ssocket = new ServerSocket(1337);
+			//http://stackoverflow.com/questions/6147481/how-to-close-port-after-using-server-sockets
+			ssocket.setReuseAddress(true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,6 +35,7 @@ public class Connector implements Runnable {
 		if(!running){
 			try {
 				ssocket.close();
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -71,6 +74,7 @@ public class Connector implements Runnable {
 		// TODO Auto-generated method stub
 		awaitConnections();
 	}
+
 	
 	
 	

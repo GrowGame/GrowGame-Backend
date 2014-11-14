@@ -1,5 +1,6 @@
 package growgame.backend.server;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,6 @@ public class ActiveConnections {
 				while(serverRunning){
 					List<Connection> list = getConnections();
 					for(Connection c : list){
-						System.out.println(c);
 						if(c.getInactiveTime().getTimeInMillis()>Timeout){
 							removeConnection(c);
 							System.out.println("Removed Connection: "+c.getUserID()+" due to Timeout");
@@ -68,6 +68,7 @@ public class ActiveConnections {
 	
 	public void removeConnection(Connection con){
 		lock.lock();
+		con.stop();
 		list.remove(con);
 		lock.unlock();
 	}

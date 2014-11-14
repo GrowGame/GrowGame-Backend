@@ -39,7 +39,8 @@ public class Database {
 				con = DriverManager.getConnection("jdbc:mysql://"+host+"/growdb","root","666666");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+			//	e.printStackTrace();
+				System.out.println("MySql error occured while connecting...MySql server offline?");
 
 			}
 		}
@@ -65,21 +66,28 @@ public class Database {
 	/**
 	 * Expects a mysql query string, which is used to get data from the currently connected mysql server
 	 * @param a read query string
-	 * @return the result set given by the server as respond to the query
+	 * @return the result set given by the server as respond to the query or null if no mysql server answered
 	 */
 	public ResultSet sendReadQuery(String query){
-		java.sql.Statement st;
-		ResultSet rs = null;
-		lock.lock();
-		try {
-			st = con.createStatement();
-			rs = st.executeQuery(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(con!=null){
+
+			java.sql.Statement st;
+			ResultSet rs = null;
+			lock.lock();
+			try {
+				st = con.createStatement();
+				rs = st.executeQuery(query);
+				System.out.println(rs);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			lock.unlock();
+			return rs;
 		}
-		lock.unlock();
-		return rs;
+		else{
+			return null;
+		}
 		
 	}
 	
