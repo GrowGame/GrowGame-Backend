@@ -2,15 +2,18 @@ package growgame.backend.server;
 
 public class KeepAliveRequest implements Request {
 
-	private String errmsg;
+	private String posAck;
+	private String errorMsg;
 
 	@Override
 	public boolean fulfillsRequirements(long userID, Object[] args) {
 		// keep alive is okay if user has authenticated
-		if(userID!=-1)
-			return true;
-		errmsg = "Authentication required before keepAlive";
-		return false;
+		if(userID==-1){
+			errorMsg = "SEND~false,user not authenticated";
+			return false;
+		}
+		posAck = "";
+		return true;
 	}
 
 	@Override
@@ -28,7 +31,7 @@ public class KeepAliveRequest implements Request {
 	@Override
 	public String getErrorMsg() {
 		//null cause no error can occur
-		return errmsg;
+		return errorMsg;
 	}
 
 	@Override

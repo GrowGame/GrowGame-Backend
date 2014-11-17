@@ -3,6 +3,7 @@ package growgame.backend.server;
 public class SellRequest implements Request {
 
 	private String errorMsg;
+	private String posAck;
 
 	@Override
 	public boolean fulfillsRequirements(long userID, Object[] args) {
@@ -11,7 +12,8 @@ public class SellRequest implements Request {
 			errorMsg = "SEND~false,user not authenticated";
 			return false;
 		}
-		return false;
+		posAck = "";
+		return true;
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class SellRequest implements Request {
 	@Override
 	public String getPositiveAck() {
 		// TODO Auto-generated method stub
-		return null;
+		return posAck;
 	}
 
 

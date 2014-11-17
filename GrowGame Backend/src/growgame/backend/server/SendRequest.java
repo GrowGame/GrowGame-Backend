@@ -11,6 +11,7 @@ public class SendRequest implements Request {
 	private Connection sender;
 	private ArrayList<Connection> recipients;
 	private String msg;
+	private String posAck;
 	public SendRequest() {
 	recipients = new ArrayList<Connection>();
 	}
@@ -33,6 +34,7 @@ public class SendRequest implements Request {
 		}
 		//TODO Check if recipients exist and write recipients in global variable
 		msg = (String) args[args.length-1];
+		posAck= "";
 		return true;
 	}
 
@@ -90,7 +92,7 @@ public class SendRequest implements Request {
 	@Override
 	public String getPositiveAck() {
 		// TODO Auto-generated method stub
-		return null;
+		return posAck;
 	}
 
 
