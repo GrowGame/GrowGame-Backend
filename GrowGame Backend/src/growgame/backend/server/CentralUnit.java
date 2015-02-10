@@ -84,32 +84,7 @@ public class CentralUnit {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			Runnable r = new Runnable(){
 
-				@Override
-				public void run() {
-					while(true){
-						
-						try {
-							out3.write("KeepAlive~\n");
-							out3.flush();
-							try {
-								Thread.sleep(5000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						} catch (IOException e) {
-							// should be solved better
-							System.out.println("Seems that the server cut the connection...stop sending packets");
-							return;
-						}
-						
-					}
-				}
-				};
-				Thread tt = new Thread(r);
-				tt.start();
 			
 	}
 	

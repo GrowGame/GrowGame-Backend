@@ -78,9 +78,9 @@ public class ConfigureState implements ConsoleState {
 					System.out.println("Illegal command: \""+s+"\"! Server is already running!");
 				}
 				else{
-				cu = new CentralUnit();
-				cu.startGameServer();
-				break;
+					cu = new CentralUnit();
+					cu.startGameServer();
+					break;
 				}
 
 
@@ -89,7 +89,8 @@ public class ConfigureState implements ConsoleState {
 					System.out.println("Illegal command: \""+s+"\"! Server is not running!");
 				}
 				else{
-				cu.pauseGameServer(0);}
+					cu.pauseGameServer(0);
+				}
 				break;
 
 
@@ -104,17 +105,17 @@ public class ConfigureState implements ConsoleState {
 			case "showplayers" : 
 				System.out.println("PlayerID | Playername | Online ");
 				break;
-			
+
 			case "showconnections" :
 				if(cu==null || !cu.getRunning()){
 					System.out.println("Illegal command: \""+s+"\"! Server is not running!");
 				}
 				else{
-				String r = "    IP	 "+" UserID"+  "   Username"+"   LastKeepAlive \n";
-				for(Connection c : ActiveConnections.getInstance().getConnections()){
-					r+= c+"\n";
-				}
-				System.out.println(r);
+					String r = "    IP	 "+" UserID"+  "   Username"+"   LastKeepAlive \n";
+					for(Connection c : ActiveConnections.getInstance().getConnections()){
+						r+= c+"\n";
+					}
+					System.out.println(r);
 				}
 				break;
 
@@ -124,8 +125,8 @@ public class ConfigureState implements ConsoleState {
 
 			case "exit" : 
 				System.out.println("Exit Console...");
-			//	console.switchState(PasswordRequestState.state);
-			//  testing purposes	
+				//	console.switchState(PasswordRequestState.state);
+				//  testing purposes	
 				exit = true;
 				console.switchState(null);
 				break;

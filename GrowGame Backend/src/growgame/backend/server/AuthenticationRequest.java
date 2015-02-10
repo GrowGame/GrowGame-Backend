@@ -65,7 +65,7 @@ public class AuthenticationRequest implements Request {
 	@Override
 	public String getPositiveAck() {
 		// TODO Auto-generated method stub
-		return null;
+		return "ACK:Auth";
 	}
 
 	public String getUsername(int userID) {

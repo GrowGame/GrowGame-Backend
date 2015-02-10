@@ -37,7 +37,7 @@ public class KeepAliveRequest implements Request {
 	@Override
 	public String getPositiveAck() {
 		// TODO Auto-generated method stub
-		return null;
+		return "ACK:KeepAlive";
 	}
 
 }

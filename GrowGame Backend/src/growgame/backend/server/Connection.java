@@ -27,6 +27,7 @@ public class Connection implements Runnable {
 	private GregorianCalendar lastKeepAlive;
 	private String username;
 	private boolean aborted;
+	private BufferedWriter out;
 
 	/**
 	 * Created a connection with a game client
@@ -69,12 +70,13 @@ public class Connection implements Runnable {
 	 * @return
 	 */
 	public BufferedWriter getOut(){
-		BufferedWriter out = null;
-		try {
-			 out = new BufferedWriter(new OutputStreamWriter(getSocket().getOutputStream()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(out==null){
+			try {
+				out = new BufferedWriter(new OutputStreamWriter(getSocket().getOutputStream()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
 		}
 		return out;
 	}
@@ -117,10 +119,13 @@ public class Connection implements Runnable {
 					}
 					
 					req.execute();
-					//System.out.println("execute :D");
+					//Send positive Acknowledgement
+					getOut().write(req.getPositiveAck()+"\n");
+					getOut().flush();
+					System.out.println("Request acknowledged");
 				}
 				else{
-					getOut().write(req.getErrorMsg());
+					getOut().write(req.getErrorMsg()+"\n");
 					getOut().flush();
 				}
 				
